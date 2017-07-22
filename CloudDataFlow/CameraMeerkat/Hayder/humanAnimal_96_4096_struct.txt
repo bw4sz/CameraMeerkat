@@ -1,0 +1,20 @@
+#of_layers { #ofLayers: 13  #ofLabels: 3 }
+IMAGEMEAN { channel: 3  width: 96 height: 96 }
+INPUT 0 { channel: 3  width: 96  height: 96 }
+CONV 1 { #of_output: 96  K_size: 5  stride: 4  pad: 0  group: 1  Afunc_type: 1 }
+POOL 1 { type: 0  K_size: 3  stride: 2  pad: 0 }
+CONV 2 { #of_output: 256  K_size: 5  stride: 1  pad: 2  group: 2  Afunc_type: 1 }
+POOL 2 { type: 0  K_size: 3  stride: 2  pad: 0 }
+CONV 3 { #of_output: 64  K_size: 3  stride: 1  pad: 1  group: 1  Afunc_type: 1 }
+CONV 4 { #of_output: 384  K_size: 3  stride: 1  pad: 1  group: 2  Afunc_type: 1 }
+CONV 5 { #of_output: 256  K_size: 3  stride: 1  pad: 1  group: 2  Afunc_type: 1 }
+POOL 5 { type: 0  K_size: 3  stride: 2  pad: 0 }
+FC 6 { #of_output: 4096  Afunc_type: 1 }
+FC 7 { #of_output: 4096  Afunc_type: 1 }
+FC 8 { #of_output: 3  Afunc_type: 0 }
+SOFTMAX {  }
+
+// CONV activate function type: RELU = 1
+// POOL type: MAX = 0, AVE = 1, STO = 3
+// LRN norm_region: AC = 0, WC = 1
+// #of_layers: 11

@@ -1,0 +1,19 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.directory-list = [{'dirloc': loc('.'),
+                        'excludes': (),
+                        'filter': u'*',
+                        'include_hidden': False,
+                        'recursive': True,
+                        'watch_for_changes': True}]
+proj.file-list = [loc('../../../AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('../../../AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py'): ('p'\
+        'roject',
+        (u'${WING:PROJECT_DIR}',
+         ''))}
+proj.main-file = loc('../../../AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py')
