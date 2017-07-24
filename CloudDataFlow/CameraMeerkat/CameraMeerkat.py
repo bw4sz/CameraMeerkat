@@ -107,36 +107,32 @@ class CameraMeerkat:
                     
     def show(self):
         
-        #box colors
-        colors=[(0,0,255),(0,255,0)]
-        sorted_keys = sorted(self.bounding_boxes.keys())
-        
-        for path in sorted_keys:
-            image=cv2.imread(path)
-            #draw boxes
-            cv2.namedWindow("image", flags=cv2.WINDOW_NORMAL)
-            boxes=self.bounding_boxes[path]
-            for box in boxes:
-                cv2.rectangle(image, (box.x,box.y), (box.x+box.length,box.y+box.length), colors[int(box.label)],2)
-            #cv2.imshow("image",image)
-            #cv2.waitKey(0)
+        if self.args.show:
+            #box colors
+            colors=[(0,0,255),(0,255,0)]
+            sorted_keys = sorted(self.bounding_boxes.keys())
             
-            destination=os.path.join(self.args.output,"CameraMeerkat")
+            for path in sorted_keys:
+                image=cv2.imread(path)
+                #draw boxes
+                cv2.namedWindow("image", flags=cv2.WINDOW_NORMAL)
+                boxes=self.bounding_boxes[path]
+                for box in boxes:
+                    cv2.rectangle(image, (box.x,box.y), (box.x+box.length,box.y+box.length), colors[int(box.label)],2)
+                #cv2.imshow("image",image)
+                #cv2.waitKey(0)
+                            
+            #clean up old files
+            ##outputs
+            annotated_files=glob.glob("Sequ_*.txt")        
+            for x in annotated_files:
+                os.remove(x)
             
-            if not os.path.exists(destination):
-                os.mkdir(destination)
-            fn=os.path.join(destination,os.path.basename(path))
-            cv2.imwrite(fn,image)
-        
-        #clean up old files
-        ##outputs
-        annotated_files=glob.glob("Sequ_*.txt")        
-        for x in annotated_files:
-            os.remove(x)
-        
-        ##list files
-        for x,items in self.sequences.items():
-            os.remove(str(x) + ".txt")        
+            ##list files
+            for x,items in self.sequences.items():
+                os.remove(str(x) + ".txt")        
+        else:
+            pass
     
     def crop(self):
         
@@ -150,51 +146,13 @@ class CameraMeerkat:
             boxes=self.bounding_boxes[path]
             for box in boxes:
                 self.clips[path].append(image[box.y:(box.y+box.length),box.x:(box.x+box.length)])
-    
-    def upload(self):
-
-        #Google Cloud Storage
-        storage_client = storage.Client()
-        
-        bucket = storage_client.bucket("CameraMeerkat")
-        if not bucket.exists():
-            bucket.create()
-        
-        #Where to write clips to upload to bucket
-        temp_destination=os.path.join(self.args.output,"CameraMeerkat")
+                destination=os.path.join(self.args.output,"CameraMeerkat")
+                
         if not os.path.exists(destination):
             os.mkdir(destination)
-        
-        #for each clip, check if it exists and upload to bucket        
-        for path in self.clips.keys():
-            clips=self.clips[path]
-    
-            for index,clip in enumerate(clips):
-                fn=os.path.splitext(path)+index+".jpg"
-                blob = self.bucket.blob(fn)
-    
-                if not blob.exists(fn):
-                    
-                    #write temp file                                            
-                    fn=os.path.join(destination,"Box_",index,"_",os.path.basename(path))
-                    cv2.imwrite(fn,clip)
-                    
-                    #Upload and delete
-                    blob.upload_from_filename(filename=fn)                                    
-                    print("Uploaded " + clip)
-                    
-                    os.remove(fn)
-    
-    def cloudVision(self):
-        
-        #Create instance
-        cv=CloudVision(self.args)
-                
-        #label images
-        cv.label()
-    
-    def writeCsv(self):
-        pass
+        fn=os.path.join(destination,os.path.basename(path))
+        cv2.imwrite(fn,image)
+         
  
 class BoundingBox:
     def __init__(self,path,x,y,length,label):
@@ -212,8 +170,5 @@ if __name__=="__main__":
     CM.parseFiles() #Generate files for Hayder's application
     CM.analyze() #Run Hayder application
     CM.show()
-    CM.upload() #Upload to google cloud
-    #CM.cloudVision() #Run CloudVision API
-    #CM.writeCsv() #Write local csv
     
 

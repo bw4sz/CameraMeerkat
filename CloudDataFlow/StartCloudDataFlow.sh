@@ -10,8 +10,8 @@ cd CameraMeerkat
 PROJECT=$(gcloud config list project --format "value(core.project)")
 BUCKET=gs://$PROJECT-testing
 
-#copy most recent DeepMeerkat in version control from main directory
-cp -r DeepMeerkat/ tests/prediction/modules/
+#copy most recent source in version control from main directory
+#cp -r CameraMeerkat/ tests/prediction/modules/
 
 #generate manifest of objects for dataflow to process
 python tests/CreateManifest.py
@@ -24,6 +24,6 @@ python tests/prediction/run.py \
     --project $PROJECT \
     --staging_location $BUCKET/staging \
     --temp_location $BUCKET/temp \
-    --job_name $PROJECT-deepmeerkat \
+    --job_name $PROJECT-camerameerkat \
     --setup_file tests/prediction/setup.py \
     --extra_package tests/opencv_python-3.2.0.7-cp27-cp27m-manylinux1_x86_64.whl
