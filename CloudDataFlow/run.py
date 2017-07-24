@@ -1,6 +1,9 @@
 import logging
-from modules import predict
+from CameraMeerkat import CameraMeerkat
 
 if __name__ == '__main__':
   logging.getLogger().setLevel(logging.INFO)
-  predict.run()
+    CM=CameraMeerkat() #Class
+    CM.findSequences() #Aggregate images by date taken
+    CM.parseFiles() #Generate files for Hayder's application
+    CM.analyze() #Run Hayder application

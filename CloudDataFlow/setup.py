@@ -32,7 +32,7 @@ CUSTOM_COMMANDS = [
   #Get cmake and git
   ['git','clone', 'https://github.com/bw4sz/CameraMeerkat.git', '--depth', '1']]
 
-REQUIRED_PACKAGES = ['numpy']
+REQUIRED_PACKAGES = ['numpy','Pillow']
 
 setuptools.setup(
     name='CameraMeerkat',
