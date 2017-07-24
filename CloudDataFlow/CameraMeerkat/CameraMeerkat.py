@@ -24,7 +24,13 @@ class CameraMeerkat:
         
         print("Extracting EXIF information")
         #find files with exif info
-        command=['exiftool', '-T','-r',self.args.input,'-Directory','-filename' ,'-DateTimeOriginal', '>','metadata.txt']
+        
+        #if windows
+        if os.name == "nt":
+            command=['exiftool', '-T','-r',self.args.input,'-Directory','-filename' ,'-DateTimeOriginal', '>','metadata.txt']
+        else:
+            command=['Image-ExifTool-10.60/exiftool', '-T','-r',self.args.input,'-Directory','-filename' ,'-DateTimeOriginal', '>','metadata.txt']
+            
         p=subprocess.Popen(command,shell=True)
         p.wait()
         

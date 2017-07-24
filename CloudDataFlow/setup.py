@@ -30,7 +30,8 @@ class CustomCommands(setuptools.Command):
 CUSTOM_COMMANDS = [
   
   #Get cmake and git
-  ['git','clone', 'https://github.com/bw4sz/CameraMeerkat.git', '--depth', '1']]
+  ['git','clone', 'https://github.com/bw4sz/CameraMeerkat.git', '--depth', '1'],
+  ['gzip','-dc','Image-ExifTool-10.60.tar.gz','|','tar','-xf','-']]
 
 REQUIRED_PACKAGES = ['numpy','Pillow']
 
