@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(dplyr)\nlibrary(stringr)\n#images\nall<-read.csv(\"C:/Users/Ben/Desktop/all_images.csv\")\n\n#gold standard classified\ngold<-read.csv(\"C:/Users/Ben/Desktop/gold_standard_data.csv\")\n\ngold<-merge(all,gold)\n\n#base url\nbase<-\"https://snapshotserengeti.s3.msi.umn.edu\"\n\ngold$URL<-paste(base,gold$URL_Info,sep=\"/\")\n\ngold<-droplevels(gold)\n\n#get capture groups that have atleast 3 images\nsample_groups<-gold %>% group_by(CaptureEventID) %>% summarize(n=n()) %>% filter(n>2) %>% head(200)\n\nsample_data <- gold %>% filter(CaptureEventID %in% sample_groups$CaptureEventID)\n\n#get filename\nsample_data$filename<-str_match(sample_data$URL_Info,pattern=\"(\\\\w+.JPG)\")[,2]\n\n#download and save to the drive.\nwrite.csv(sample_data,\"Zooniverse.csv\")\n\n#where to save\nsetwd(\"F:\")\nfor(x in 1:nrow(sample_data)){\n  row<-sample_data[x,]\n  download.file(url=row$URL,row$filename,mode=\"wb\")\n}\n\n",
+    "created" : 1497387424802.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2093129414",
+    "id" : "42FDD98A",
+    "lastKnownWriteTime" : 1497625751,
+    "last_content_update" : 1497625751754,
+    "path" : "~/GoogleCameraTrap/Zooniverse/Zooniverse.R",
+    "project_path" : "Zooniverse.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

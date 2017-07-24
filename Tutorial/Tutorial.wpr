@@ -13,11 +13,11 @@ proj.directory-list = [{'dirloc': loc('.'),
                         'watch_for_changes': True}]
 proj.file-list = [loc('../../../AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py')]
 proj.file-type = 'shared'
-proj.launch-config = {loc('dev_appserver.py'): ('project',
-        (u'--max_module_instances=1 threadsafe_override=false',
-         '')),
-                      loc('../../../AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py'): ('p'\
+proj.launch-config = {loc('../../../AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py'): ('p'\
         'roject',
         (u'${WING:PROJECT_DIR}',
+         '')),
+                      loc('dev_appserver.py'): ('project',
+        (u'--max_module_instances=1 threadsafe_override=false',
          ''))}
 proj.main-file = loc('../../../AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py')

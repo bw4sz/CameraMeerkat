@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(dplyr)\nlibrary(stringr)\n\nimages<-read.csv(\"G:/Zooniverse/all_images.csv\")\nlabels<-read.csv(\"G:/Zooniverse/consensus_data.csv\")\n\n#get all images from the same site and location, ordered by time.\nimages$CameraEvent<-str_match(images$URL_Info,\"/(\\\\w+)_PICT\\\\w+.JPG\")[,2]\n\n#get full url\n#append base url\nbase<-\"https://snapshotserengeti.s3.msi.umn.edu\"\nimages$URL<-paste(base,images$URL_Info,sep=\"/\")\n\n#assign file name\nimages$filename<-str_match(images$URL_Info,pattern=\"(\\\\w+.JPG)\")[,2]\n\ntable(images$CameraEvent)\n\nWriteImages<-function(x){\n  towrite<-images %>% dplyr::filter(CameraEvent %in% x)\n  #where to save\n  setwd(\"G:/Zooniverse\")\n  \n  #create a folder with the name\n  dir.create(x)\n  \n  \n  for(img in 1:nrow(towrite)){\n    row<-towrite[img,]\n    try(download.file(url=row$URL,paste(x,\"/\",row$filename,sep=\"\"),mode=\"wb\"))\n  }\n  \n}\n\n#get first five\ncams<-unique(images$CameraEvent)[sample(1:length(unique(images$CameraEvent)),1)]\nsapply(cams,function(y) WriteImages(y))\n",
+    "created" : 1498855120631.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3302662994",
+    "id" : "78A63482",
+    "lastKnownWriteTime" : 1498932007,
+    "last_content_update" : 1498932007243,
+    "path" : "~/GoogleCameraTrap/Zooniverse/GetCameras.R",
+    "project_path" : "GetCameras.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

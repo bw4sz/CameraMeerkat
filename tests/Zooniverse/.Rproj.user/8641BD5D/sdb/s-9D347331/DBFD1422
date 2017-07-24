@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#Anaylze\n\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(stringr)\n\n#true state\ntrue_state<-read.csv(\"Zooniverse.csv\")\n\n#predicted labels\npred_state<-read.csv(\"annotations.csv\")\n\n#merge \n\nhead(pred_state)\nhead(true_state)\n\n#match IDs\npred_state$filename<-  str_match(pred_state$Image,\"\\\\w+.JPG\")\ndat<-merge(pred_state,true_state,by=\"filename\")\n\n\n#turn to characters\ndat$Decription<-as.character(dat$Description)\ndat$Species<-as.character(dat$Species)\ndat$filename<-as.character(dat$filename)\n\n#Label Diversity\ndat %>% group_by(Description) %>% summarize(n=n()) %>% arrange(desc(n))\n\nkeep<-c(\"wildlife\",\"water buffalo\",\"tapir\",\"hippopotamus\",\"duck\",\"pack animal\",\"flightless bird\",\"deer\",\"pronghorn\",\"ostrich\",\"goose\",\" dog like mammal\",\"antelope\",\"water bird\",\"springbok\",\"giraffe\",\"gazelle\",\"bird\",\"giraffidae\",\"bison\",\"impala\",\"cow goat family\",\"elephant\",\"indian elephant\",\"elephants and mammoths\",\"wildebeest\",\"rhinoceros\",\"mare\",\"mustang horse\",\"zebra\",\"bull\",\"vertebrate\",\"horse\",\"cattle like mammal\",\"horse like mammal\",\"mammal\",\"wildlife\",\"fauna\")\n\n#how many labels were kept?\nlength(keep)/length(unique(dat$Description))\n\n#number of species before\nbefore<-true_state %>% group_by(Species) %>% summarize(before=n())\n\nkeepdat<-dat %>% filter(Description %in% keep)\n\n#number of species after\nprop<-true_state %>% filter(filename %in% keepdat$filename) %>% group_by(Species) %>% summarise(after=n()) %>% full_join(before)  %>% mutate(p=round(after/before,3)*100)\n\n#list of images that should have been kept but were discarded.\nmissed<-true_state %>% filter(!filename %in% keepdat$filename) \n\n#ridiculous human label, there is a tiny human like a quarter mile away.\nS4_U13_R2_IMAG0857.JPG\nS4_U13_R2_IMAG0858.JPG\n\n#proportion of exactly matches\nsum(dat$Species==dat$Decription)/nrow(true_state) * 100\ndat %>% filter(Species==Description) %>% group_by(Species) %>% summarize(n=n())\n\n#humans\ndat %>% filter(Species==\"human\") %>% group_by(filename) %>% group_by(Description) %>% summarize()\n\ndat %>% filter(Species==\"impossible\")\n\n#parse out the common shared labels #analogoeus to sorting out common words in text mining\ncommon<-dat %>% group_by(Description) %>% summarize(n=n()) %>% arrange(desc(n)) %>% filter(n>250)\n\n#grab labels of interest\n",
+    "created" : 1497632410040.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3246073535",
+    "id" : "DBFD1422",
+    "lastKnownWriteTime" : 1497887024,
+    "last_content_update" : 1497887024722,
+    "path" : "~/GoogleCameraTrap/Zooniverse/Analyze.R",
+    "project_path" : "Analyze.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
